@@ -1,6 +1,8 @@
 package com.nisum.javaevaluation.models;
 
 
+import java.util.Date;
+
 import javax.persistence.*;
 
 import lombok.AllArgsConstructor;
@@ -15,12 +17,13 @@ import lombok.NoArgsConstructor;
 public class AppUser {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	public Long id;
-	@Column(nullable = false, length = 80)
 	public String name;
-	@Column(nullable = false, length = 100)
 	public String email;
-	@Column(nullable = false, length = 128)
 	public String password;
+	public String token;
+	public Date created;
+	public Date modified;
+	public Date last_login;
+	public boolean isactive;
 }
