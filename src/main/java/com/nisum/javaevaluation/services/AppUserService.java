@@ -1,6 +1,8 @@
 package com.nisum.javaevaluation.services;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
+import java.util.UUID;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
@@ -22,13 +24,20 @@ public class AppUserService {
 	@Autowired
 	private SecuritySupports secureUtils;
 	
-	public void saveUser(AppUserViewModelRequest user) {
-		modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
+	public void saveUser(AppUserViewModelRequest user) throws NoSuchAlgorithmException {
+		//Config mapper
+		modelMapper.getConfiguration()
+		.setMatchingStrategy(MatchingStrategies.LOOSE)
+		.setSkipNullEnabled(true)
+	    .setFieldMatchingEnabled(true);
+		
+		//Crea hash para clave
 		AppUser userEntity = modelMapper.map(user, AppUser.class);
-		modelMapper.createTypeMap(AppUser.class, AppUserViewModelRequest.class);
-		modelMapper.validate();
-		//userEntity.password = secureUtils.hashUserPassword(user.password);
-		//userRepository.save(userEntity);
+		userEntity.password = secureUtils.hashUserPassword(user.password);
+		
+		//Genera nuevo ID al usuario
+		userEntity.id = UUID.randomUUID().toString();
+		userRepository.save(userEntity);
 	}
 	
 	public List<AppUser> listAll(){

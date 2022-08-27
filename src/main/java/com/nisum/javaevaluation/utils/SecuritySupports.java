@@ -1,17 +1,16 @@
 package com.nisum.javaevaluation.utils;
 
-import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
+import javax.xml.bind.DatatypeConverter;
 
 public class SecuritySupports {
-
-	final String pepper = "GfUAUJMv7hjXpgU8vZKUtt8a";
-	final int iterations = 200000;
-	final int hashWidth = 256;
 	
-	public String hashUserPassword(String pass) {
-		Pbkdf2PasswordEncoder pbkdf2PasswordEncoder = new Pbkdf2PasswordEncoder(pepper, iterations, hashWidth);
-		pbkdf2PasswordEncoder.setEncodeHashAsBase64(true);
-		String encodedPassword = pbkdf2PasswordEncoder.encode(pass);
-		return encodedPassword;
+	public String hashUserPassword(String password) throws NoSuchAlgorithmException {
+		MessageDigest md = MessageDigest.getInstance("MD5");
+	    md.update(password.getBytes());
+	    byte[] digest = md.digest();
+	    return DatatypeConverter.printHexBinary(digest);
 	}
 }

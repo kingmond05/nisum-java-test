@@ -13,17 +13,26 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "users")
+@Table(name = "users", schema = "public")
 public class AppUser {
 
 	@Id
-	public Long id;
+	@Column(name="id")
+	public String id;
+	@Column(name="name")
 	public String name;
+	@Column(name="email")
 	public String email;
+	@Column(name="password")
 	public String password;
+	@Column(name="token")
 	public String token;
+	@Column(name="created")
 	public Date created;
+	@Column(name="modified")
 	public Date modified;
+	@Column(name="last_login")
 	public Date last_login;
-	public boolean isactive;
+	@Column(name="state")
+	public boolean state;
 }
