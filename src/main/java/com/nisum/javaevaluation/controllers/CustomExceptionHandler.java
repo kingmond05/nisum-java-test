@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,9 @@ import com.nisum.javaevaluation.views.GenericErrorViewModel;
 @ControllerAdvice(annotations = RestController.class)
 public class CustomExceptionHandler extends ResponseEntityExceptionHandler
 {
+	@Autowired
+	private UserValidationConfig validationConfig;
+	
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Object> handleAllExceptions(Exception ex, WebRequest request) {
         List<String> details = new ArrayList<>();
@@ -42,6 +46,9 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler
         GenericErrorViewModel error = new GenericErrorViewModel();
         error.mensaje = errors.stream()
                 .collect(Collectors.joining(","));
+        if(error.mensaje.isBlank()) {
+        	error.mensaje = validationConfig.getGenericerrormessage();
+        }
         return new ResponseEntity<Object>(error, HttpStatus.BAD_REQUEST);
     }
 	

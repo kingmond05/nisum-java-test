@@ -34,7 +34,7 @@ public class AppUserService implements IAppUserService {
 	@Autowired
 	private SecuritySupports secureUtils;
 	@Autowired
-	private PhoneService phoneService;
+	private IPhoneService phoneService;
 	@Autowired
 	private RegexValidation regex;
 	@Autowired
