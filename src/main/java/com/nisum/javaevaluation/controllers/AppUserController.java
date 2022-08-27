@@ -13,9 +13,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
 import com.nisum.javaevaluation.models.AppUser;
 import com.nisum.javaevaluation.services.AppUserService;
 import com.nisum.javaevaluation.views.AppUserViewModelRequest;
+import com.nisum.javaevaluation.views.AppUserViewModelResponse;
+import com.nisum.javaevaluation.views.GenericErrorViewModel;
 
 @RestController
 @EnableAutoConfiguration(exclude = {org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration.class })
@@ -27,13 +30,25 @@ public class AppUserController {
 	@GetMapping("/users")
 	public ResponseEntity<List<AppUser>> getAllUser() {
 		List<AppUser> users = userService.listAll();
-		return ResponseEntity.status(HttpStatus.OK).body(users);
+		if(users.size() > 0) {
+			return ResponseEntity.status(HttpStatus.OK).body(users);
+		}
+		else {
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+		}
 	}
 	@PostMapping("/user")
 	public ResponseEntity<?> createUser(@Valid @RequestBody AppUserViewModelRequest model) {
 		try {
-			userService.saveUser(model);
-			return ResponseEntity.status(HttpStatus.CREATED).body(null);
+			
+			if(userService.getUserByEmail(model.email) != null) {
+				GenericErrorViewModel resp = new GenericErrorViewModel();
+				resp.mensaje = "El correo ya registrado";
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+						.body(resp);
+			}
+			AppUserViewModelResponse response = userService.saveUser(model);
+			return ResponseEntity.status(HttpStatus.CREATED).body(response);
 		} catch (NoSuchAlgorithmException e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 		}

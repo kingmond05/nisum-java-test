@@ -2,7 +2,6 @@ package com.nisum.javaevaluation.services;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
-import java.util.UUID;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -32,5 +31,9 @@ public class PhoneService {
 			phoneUnit.userid = userid;
 			phoneRepository.save(phoneUnit);
 		}
+	}
+	
+	public List<Phone> listAll(){
+		return phoneRepository.findAll();
 	}
 }
