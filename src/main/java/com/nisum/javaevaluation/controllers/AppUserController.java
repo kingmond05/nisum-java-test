@@ -28,6 +28,7 @@ public class AppUserController {
 
 	@Autowired
 	private AppUserService userService;
+	@Autowired
 	private UserValidationConfig validationConfig;
 
 	@GetMapping("/users")
@@ -40,15 +41,19 @@ public class AppUserController {
 			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
 		}
 	}
+	
+	@GetMapping("/settings")
+	public ResponseEntity<String> getSettings() {
+		return ResponseEntity.status(HttpStatus.OK).body(validationConfig.getExistingemailerrortext());
+	}
 	@PostMapping("/user")
 	public ResponseEntity<?> createUser(@Valid @RequestBody AppUserViewModelRequest model) {
 		try {
 			
 			if(userService.getUserByEmail(model.email) != null) {
 				GenericErrorViewModel resp = new GenericErrorViewModel();
-				validationConfig = new UserValidationConfig();
-				resp.mensaje = (validationConfig.existingemailerrortext != null ?
-						validationConfig.existingemailerrortext : 
+				resp.mensaje = (validationConfig.getExistingemailerrortext() != null ?
+						validationConfig.getExistingemailerrortext() : 
 							"El correo ya fue registrado");
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 						.body(resp);

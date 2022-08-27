@@ -5,6 +5,7 @@ Por Ramón Matos
 # Cómo correr la aplicación
 
  - Clonar repositorio del branch **"main"** o descargar archivo **".zip"**
+ - En una terminal (o CMD) navegar a la carpeta raíz reciente clonada o descargada
  - En la carpeta raíz del proyecto correr el siguiente comando:
 
 ```
@@ -12,9 +13,9 @@ mvn clean package
 
 ```
 
-Deberá traer un resultado parecido al siguiente si fue satisfactorio:
+Deberá traer un resultado parecido al siguiente si fue **satisfactorio**:
 
-```
+```sh
 [INFO] Replacing main artifact with repackaged archive
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD SUCCESS
@@ -24,12 +25,36 @@ Deberá traer un resultado parecido al siguiente si fue satisfactorio:
 [INFO] ------------------------------------------------------------------------
 ```
 
- - Navegar a la carpeta llamada "target" en el directorio raíz de la aplicación y ejecutar el comando
- ```
+  - Navegar a la carpeta llamada **"target"** en el directorio raíz de la aplicación y ejecutar el comando
+ ```sh
   java -jar javaevaluation-0.0.1-SNAPSHOT.jar
   
  ``` 
- - Con un cliente HTTP o con CURL ejecutar una prueba para crear un registro
+  - Para ejecutar con una configuración externa deberá crear un archivo **".properties"** con el siguiente contenido y los valores deseados:
+  
+  ```
+#Server info
+server.port=8080
+
+#Jpa Config
+spring.jpa.hibernate.ddl-auto= update
+spring.jpa.show-sql= true
+spring.jpa.database= HSQL
+
+#Input validation messages and config
+inputvalidation.existingemailerrortext=El correo ya fue registrados
+inputvalidation.passwordregex=XXX
+
+  ```
+  
+  - Una vez se tenga el archivo configurado correr el siguiente comando **reemplazando** la ruta y nombre de archivo (ejecutar dentro de la carpeta "target")
+  ```
+  java -jar javaevaluation-0.0.1-SNAPSHOT.jar --spring.config.location=file:///Users/home/config/jdbc.properties
+  
+  ```
+  Nota: Ruta a reemplazar: "/Users/home/config/jdbc.properties" dentro del comando
+  
+  - Con un cliente HTTP como Postman puede importar el siguiente comando o ejecutar directamente en una terminal (con CURL instalado), con esto se probará la creación de un usuario
  
 ```
 curl --location --request POST 'http://localhost:8080/api/v1/user' \
@@ -83,3 +108,13 @@ CREATE TABLE phones (
    PRIMARY KEY (number)
 ); 
 ```
+
+Nota: se utilizó para fines de pruebas el HSQLDB embebido en Springboot.
+
+# Tech
+
+ - Springboot
+ - Maven
+ - JPA con Hibernate
+ - DB InMemory HSQLDB
+ 
