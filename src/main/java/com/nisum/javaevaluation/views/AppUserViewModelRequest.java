@@ -23,7 +23,7 @@ public class AppUserViewModelRequest {
 	@Email(message = "Email debe tener formato user@domain.cl")
 	public String email;
 	@NotBlank(message = "Password es requerido")
-	@Pattern(regexp = "^(?=\\w*\\d)(?=\\w*[A-Z])(?=\\w*[a-z])\\S{7,16}$", message = "El password debe tener al entre 8 y 16 caracteres, al menos un dígito, al menos una minúscula y al menos una mayúscula.")
+	//@Pattern(regexp = "^(?=\\w*\\d)(?=\\w*[A-Z])(?=\\w*[a-z])\\S{7,16}$", message = "El password debe tener al entre 8 y 16 caracteres, al menos un dígito, al menos una minúscula y al menos una mayúscula.")
 	public String password;
 	public List<PhoneViewModel> phones;
 }

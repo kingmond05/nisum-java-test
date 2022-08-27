@@ -7,12 +7,14 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.nisum.javaevaluation.models.Phone;
 import com.nisum.javaevaluation.repositories.PhoneRepository;
 import com.nisum.javaevaluation.views.AppUserViewModelRequest;
 
-public class PhoneService {
+@Service
+public class PhoneService implements IPhoneService {
 	@Autowired
 	private PhoneRepository phoneRepository;
 	@Autowired

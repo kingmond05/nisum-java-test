@@ -4,7 +4,9 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 import javax.xml.bind.DatatypeConverter;
+import org.springframework.stereotype.Component;
 
+@Component
 public class SecuritySupports {
 	
 	public String hashUserPassword(String password) throws NoSuchAlgorithmException {

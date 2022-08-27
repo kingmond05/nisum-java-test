@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.nisum.javaevaluation.models.AppUser;
-import com.nisum.javaevaluation.services.AppUserService;
+import com.nisum.javaevaluation.services.IAppUserService;
 import com.nisum.javaevaluation.views.AppUserViewModelRequest;
 import com.nisum.javaevaluation.views.AppUserViewModelResponse;
 import com.nisum.javaevaluation.views.GenericErrorViewModel;
@@ -27,7 +28,7 @@ import com.nisum.javaevaluation.views.GenericErrorViewModel;
 public class AppUserController {
 
 	@Autowired
-	private AppUserService userService;
+	private IAppUserService userService;
 	@Autowired
 	private UserValidationConfig validationConfig;
 
@@ -42,12 +43,9 @@ public class AppUserController {
 		}
 	}
 	
-	@GetMapping("/settings")
-	public ResponseEntity<String> getSettings() {
-		return ResponseEntity.status(HttpStatus.OK).body(validationConfig.getExistingemailerrortext());
-	}
 	@PostMapping("/user")
-	public ResponseEntity<?> createUser(@Valid @RequestBody AppUserViewModelRequest model) {
+	public ResponseEntity<?> createUser(@Valid @RequestBody AppUserViewModelRequest model) 
+			throws MethodArgumentNotValidException {
 		try {
 			
 			if(userService.getUserByEmail(model.email) != null) {
