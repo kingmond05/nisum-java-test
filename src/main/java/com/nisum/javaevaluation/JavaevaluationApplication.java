@@ -8,6 +8,7 @@ import org.springframework.context.annotation.ComponentScan;
 
 import com.nisum.javaevaluation.controllers.AppUserController;
 import com.nisum.javaevaluation.services.AppUserService;
+import com.nisum.javaevaluation.services.PhoneService;
 import com.nisum.javaevaluation.utils.SecuritySupports;
 
 @SpringBootApplication
@@ -31,5 +32,10 @@ public class JavaevaluationApplication {
 	@Bean
 	public AppUserService appUserService() {
 	    return new AppUserService();
+	}
+	
+	@Bean
+	public PhoneService phoneService() {
+	    return new PhoneService();
 	}
 }

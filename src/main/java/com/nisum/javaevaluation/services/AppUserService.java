@@ -23,6 +23,8 @@ public class AppUserService {
     private ModelMapper modelMapper;
 	@Autowired
 	private SecuritySupports secureUtils;
+	@Autowired
+	private PhoneService phoneService;
 	
 	public void saveUser(AppUserViewModelRequest user) throws NoSuchAlgorithmException {
 		//Config mapper
@@ -30,14 +32,19 @@ public class AppUserService {
 		.setMatchingStrategy(MatchingStrategies.LOOSE)
 		.setSkipNullEnabled(true)
 	    .setFieldMatchingEnabled(true);
+		AppUser userEntity = modelMapper.map(user, AppUser.class);
 		
 		//Crea hash para clave
-		AppUser userEntity = modelMapper.map(user, AppUser.class);
 		userEntity.password = secureUtils.hashUserPassword(user.password);
 		
 		//Genera nuevo ID al usuario
 		userEntity.id = UUID.randomUUID().toString();
 		userRepository.save(userEntity);
+		
+		//Guarda los telefonos si existen
+		if(user.phones.size() > 0) {
+			phoneService.savePhone(user, userEntity.id);
+		}
 	}
 	
 	public List<AppUser> listAll(){

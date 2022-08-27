@@ -2,8 +2,13 @@ package com.nisum.javaevaluation.models;
 
 
 import java.util.Date;
+import java.util.List;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -35,4 +40,6 @@ public class AppUser {
 	public Date last_login;
 	@Column(name="state")
 	public boolean state;
+	@OneToMany(mappedBy="id")
+	List<Phone> phones;
 }
